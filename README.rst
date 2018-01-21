@@ -13,13 +13,13 @@ Prerequisites
 4. A Python3 environment (with AWS credentials configured)
 5. The ID of your hosted zone(s) you want to use from Route53 (optional) 
 
-   1. If the ID is not provided, we will attempt to find the zone id through the Route54 client
+   1. If the ID is not provided, we will attempt to find the zone id through the Route53 client
 
 
 How to use
 ----------
 
-Simply supply the path to ``certbot_hook.py`` for the ``--manual-auth-hook`` and ``--manual-cleaup-hook`` options to the certbot command. You should also specify ``--preferred-challenges`` as ``dns`` and the plugin as ``--manual``
+Simply supply the path to ``certbot_hook.py`` for the ``--manual-auth-hook`` and ``--manual-cleaup-hook`` options to the certbot command. You should also specify ``--preferred-challenges`` as ``dns`` and the plugin as manual by supplying ``--manual``
 
 For example
 
