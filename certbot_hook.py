@@ -30,8 +30,6 @@ def main():
     client = boto3.client('route53')
     domain_name = os.environ.get('CERTBOT_DOMAIN')
     zone_name = '.'.join(domain_name.split('.')[-2:])
-
-    # zone_id = zone_map.get(zone_name)
     zone_id = get_zone_id(client, zone_name)
     challenge = os.environ.get('CERTBOT_VALIDATION')
     challenge = '"{}"'.format(challenge)
@@ -40,18 +38,18 @@ def main():
         action = 'DELETE'
     else:
         action = 'CREATE'
+
     record_change = {
         'Action': action,
         'ResourceRecordSet': {'Name': record_name,
                               'ResourceRecords': [{'Value': challenge}],
                               'TTL': 300,
                               'Type': 'TXT'}}
-    changes = [record_change]
-    kwargs = {'ChangeBatch': {'Changes': changes,
+    kwargs = {'ChangeBatch': {'Changes': [record_change],
                               'Comment': 'add records for cert update'},
               'HostedZoneId': zone_id}
 
-    response = client.change_resource_record_sets(**kwargs)
+    client.change_resource_record_sets(**kwargs)
     if action == 'CREATE':
         time.sleep(5)  # wait for record creation
 
