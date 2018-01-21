@@ -4,7 +4,7 @@ certbot-route-53-hook
 A pre-auth and post-auth hook for certbot's manual plugin to satisfy DNS challenge by creating the required recordset
 via Boto3. When used as cleanup hook, it will delete the previously created record set.
 
-Useful for using certbot to request or renew certs for systems that are not publically accessible, such as those that may sit on a public network. It is also suitable for automated non-interactive use.
+Useful for using certbot to request or renew certs for systems that are not publically accessible, such as those that may sit on an internal network. It is also suitable for automated non-interactive use.
 
 
 Prerequisites
