@@ -1,5 +1,5 @@
-certbot-route-53-hook
-=====================
+certbot-route-53-hook v0.1
+==========================
 
 A pre-auth and post-auth hook for certbot's manual plugin to satisfy DNS challenges by creating the required recordset
 via AWS Route 53 and ``boto3``. When used as cleanup hook, it will delete the previously created record set.
@@ -81,6 +81,9 @@ Automatically via boto3
 """""""""""""""""""""""
 
 If the zone ID is not found with the above methods, the hook will request a list of all your hosted zones and find the zone it needs.
+
+This feature is experimental. Further, there is a known issue where identifying the zone ID might fail if you have more
+than 100 hosted zones. If you have more than 100 hosted zones, you may want to use the config file option instead.
 
 
 
