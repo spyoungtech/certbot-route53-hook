@@ -113,3 +113,8 @@ You will be prompted to provide your access ID and secret key.
 
 This portion of the documentation is provided as a convenience. If you have issues with credentials, please see the Amazon docs.
 
+
+Similar Work
+------------
+
+`certbot-route53`_ is a shell script that does pretty much exactly the same thing.
