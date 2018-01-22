@@ -118,3 +118,5 @@ Similar Work
 ------------
 
 `certbot-route53`_ is a shell script that does pretty much exactly the same thing.
+
+.. _certbot-route53: https://github.com/jed/certbot-route53
