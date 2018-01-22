@@ -3,7 +3,7 @@
 import os
 import time
 import boto3
-
+from pprint import pprint
 
 class ZoneIDNotFoundError(RuntimeError):
     pass
@@ -39,6 +39,8 @@ def main():
     else:
         action = 'CREATE'
 
+    print('Processing recordset "{}" {} request for zone ID {}'.format(zone_name, action, zone_id))
+
     record_change = {
         'Action': action,
         'ResourceRecordSet': {'Name': record_name,
@@ -49,9 +51,11 @@ def main():
                               'Comment': 'add records for cert update'},
               'HostedZoneId': zone_id}
 
-    client.change_resource_record_sets(**kwargs)
+    response = client.change_resource_record_sets(**kwargs)
+    pprint(response)
     if action == 'CREATE':
-        time.sleep(5)  # wait for record creation
+        print('\nWaiting 15 seconds to ensure record creation is processed.\n')
+        time.sleep(15)
 
 
 if __name__ == '__main__':
