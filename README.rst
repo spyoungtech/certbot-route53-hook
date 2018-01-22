@@ -1,10 +1,10 @@
 certbot-route-53-hook
 =====================
 
-A pre-auth and post-auth hook for certbot's manual plugin to satisfy DNS challenge by creating the required recordset
-via Boto3. When used as cleanup hook, it will delete the previously created record set.
+A pre-auth and post-auth hook for certbot's manual plugin to satisfy DNS challenges by creating the required recordset
+via AWS Route 53 and ``boto3``. When used as cleanup hook, it will delete the previously created record set.
 
-Useful for using certbot to request or renew certs for systems that are not publically accessible, such as those that may sit on an internal network. It is also suitable for automated non-interactive use.
+Useful for using certbot to request or renew certs for systems that are not publicly accessible, such as those that may sit on an internal network. It is also suitable for automated non-interactive use.
 
 
 Prerequisites
@@ -13,10 +13,10 @@ Prerequisites
 1. A domain name with DNS managed by Route53
 2. A set of AWS IAM credentials with Route53 permissions
 3. Certbot
-4. A Python3 environment (with AWS credentials configured)
+4. A Python3 environment with ``boto3`` installed (with AWS credentials configured)
 5. The ID of your hosted zone(s) you want to use from Route53 (optional) 
 
-   1. If the ID is not provided, we will attempt to find the zone id through the Route53 client
+   1. If the ID is not provided, the hook will attempt to find the zone id through the Route53 boto3 client
 
 
 How to use
@@ -24,11 +24,14 @@ How to use
 
 Simply supply the path to ``certbot_hook.py`` for the ``--manual-auth-hook`` and ``--manual-cleaup-hook`` options to the certbot command. You should also specify ``--preferred-challenges`` as ``dns`` and the plugin as manual by supplying ``--manual``
 
-For example
+For example to request a new certificate
 
 ::
 
     certbot certonly --preferred-challenges=dns --manual --manual-auth-hook=/path/to/certbot_hook.py --manual-cleanup-hook=/path/to/certbot_hook.py -d secure.example.com
+
+
+Then to renew, you can simply use ``certbot renew``.
 
 
 NOTE: the hook is called even on dry-runs.
@@ -77,7 +80,7 @@ Alongside the ``certbot_hook.py`` file place a file named ``config.py`` (example
 Automatically via boto3
 """""""""""""""""""""""
 
-If the above methods do not work, the hook will request a list of all your hosted zones and find the zone it needs.
+If the zone ID is not found with the above methods, the hook will request a list of all your hosted zones and find the zone it needs.
 
 
 
