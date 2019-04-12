@@ -12,15 +12,34 @@ Prerequisites
 
 1. A domain name with DNS managed by Route53
 2. A set of AWS IAM credentials with Route53 permissions
+3. Docker 
+OR
 3. Certbot
 4. A Python3 environment with ``boto3`` installed (with AWS credentials configured)
-5. The ID of your hosted zone(s) you want to use from Route53 (optional) 
-
-   1. If the ID is not provided, the hook will attempt to find the zone id through the Route53 boto3 client
 
 
 How to use
 ----------
+
+With Docker
+^^^^^^^^^^^
+
+The entrypoint in the dockerfile takes care of most of the arguments you need. You just need to provide AWS credentials, an email, and the domain to certify. 
+
+You can run build the image and generate your certificates using docker like so
+
+::
+
+    docker build -t certbot-route53-hook:latest . 	
+    mkdir letsencrypt
+    docker run --rm -v $(pwd)/letsencrypt:/etc/letsencrypt/ -e AWS_ACCESS_KEY_ID=<Your ID> -e AWS_SECRET_ACCESS_KEY=<Your Key> certbot-route53-hook --email=<Your Email> -d <your.domain.com> 
+
+
+Your certificates will appear in the mounted directory.
+
+Manually with certbot and Python
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 Simply supply the path to ``certbot_hook.py`` for the ``--manual-auth-hook`` and ``--manual-cleaup-hook`` options to the certbot command. You should also specify ``--preferred-challenges`` as ``dns`` and the plugin as manual by supplying ``--manual``
 
@@ -39,6 +58,43 @@ NOTE: the hook is called even on dry-runs.
 
 Other notes
 -----------
+
+IAM Policy example
+^^^^^^^^^^^^^^^^^^
+
+As a best practice, you may want to use credentials with just minimum access needed to use the hook. An example policy might look like this
+
+::
+
+    {
+        "Version": "2012-10-17",
+        "Id": "certbot-dns-route53 sample policy",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "route53:ListHostedZones",
+                    "route53:GetChange"
+                ],
+                "Resource": [
+                    "*"
+                ]
+            },
+            {
+                "Effect" : "Allow",
+                "Action" : [
+                    "route53:ChangeResourceRecordSets"
+                ],
+                "Resource" : [
+                    "arn:aws:route53:::hostedzone/YOURHOSTEDZONEID"
+                ]
+            }
+        ]
+    }
+
+
+
+
 
 
 Using the hook noninteractively
