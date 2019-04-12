@@ -1,4 +1,4 @@
-certbot-route-53-hook v0.1
+certbot-route-53-hook v0.2
 ==========================
 
 A pre-auth and post-auth hook for certbot's manual plugin to satisfy DNS challenges by creating the required recordset
