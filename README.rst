@@ -13,7 +13,9 @@ Prerequisites
 1. A domain name with DNS managed by Route53
 2. A set of AWS IAM credentials with Route53 permissions
 3. Docker 
+
 OR
+
 3. Certbot
 4. A Python3 environment with ``boto3`` installed (with AWS credentials configured)
 
